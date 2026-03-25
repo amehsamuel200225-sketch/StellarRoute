@@ -102,7 +102,8 @@ pub async fn get_quote(
 
     // For now, implement simple direct path (SDEX only)
     // TODO: Implement multi-hop routing in Phase 2
-    let (price, path) = find_best_price(&state, &base_asset, &quote_asset, base_id, quote_id, amount).await?;
+    let (price, path) =
+        find_best_price(&state, &base_asset, &quote_asset, base_id, quote_id, amount).await?;
 
     let total = amount * price;
     // Keep timestamps in milliseconds to match API docs and frontend staleness logic.
@@ -130,11 +131,7 @@ pub async fn get_quote(
     if let Some(cache) = &state.cache {
         if let Ok(mut cache) = cache.try_lock() {
             let _ = cache
-                .set(
-                    &quote_cache_key,
-                    &response,
-                    state.cache_policy.quote_ttl,
-                )
+                .set(&quote_cache_key, &response, state.cache_policy.quote_ttl)
                 .await;
         }
     }
